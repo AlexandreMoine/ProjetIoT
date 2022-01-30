@@ -12,7 +12,10 @@
 #include <FreeRTOS.h>
 
 const char *SSID = "HuaweiP30Quentin";
+//const char *SSID = "Linksys_RM";
 const char *PWD = "quentinphone";
+//const char *PWD = "VictorRatanaestnele291203.";
+
 
 WebServer server(80);
 
@@ -28,6 +31,7 @@ int BassTab[]={1911,1702};
 float seuil = 2000;      //A Modifier Seuil=0 (dans setup() qu'on initialise la valeur)
 int i=0;
 float sensorValue;
+int ventilateur=0;
 
 //Json Buffer
 StaticJsonDocument<250> jsonDocument;
@@ -52,6 +56,8 @@ void connectToWiFi() {
 void setup_routing() {
   server.on("/tauxGaz", getTauxGaz);
   server.on("/seuil", getSeuil);
+  server.on("/modifierSeuil", HTTP_POST, handlePost);
+  server.on("/ventilation", HTTP_POST, handlePostVenti);
 
   // start server
   server.begin();
@@ -93,10 +99,30 @@ void getEnv() {
 
 void handlePost() {
   if (server.hasArg("plain") == false) {
-    //handle error here
+    Serial.println("Erreur post seuil");
   }
   String body = server.arg("plain");
   deserializeJson(jsonDocument, body);
+
+  seuil = jsonDocument["seuil"];
+  Serial.print("Nouveau seuil: ");
+  Serial.println(seuil);
+
+  // Respond to the client
+  server.send(200, "application/json", "{}");
+}
+
+
+void handlePostVenti() {
+  if (server.hasArg("plain") == false) {
+    Serial.println("Erreur post activer Ventilateur");
+  }
+  String body = server.arg("plain");
+  deserializeJson(jsonDocument, body);
+
+  ventilateur = jsonDocument["ventilateur"];
+  Serial.print("Valeur ventilateur: ");
+  Serial.println(ventilateur);
 
   // Respond to the client
   server.send(200, "application/json", "{}");
@@ -121,40 +147,41 @@ void tone(byte pin, int freq) {
 }
 
 void setup_task() {
-    xTaskCreate(     
-  read_sensor_data,      
-  "Read sensor data",      
-  8000,      
-  NULL,      
-  1,     
-  NULL     
+    xTaskCreate(
+  read_sensor_data,
+  "Read sensor data",
+  8000,
+  NULL,
+  1,
+  NULL
   );
 }
 
 void read_sensor_data(void * parameter){
-  for (;;) {  
+  for (;;) {
     Serial.print("Sensor value = ");
     sensorValue = analogRead(GazSensor);
     Serial.println(sensorValue);
-    
+
     if(sensorValue>seuil){
+        ventilateur=255;
         digitalWrite(ledPin, HIGH);
         leds.setColorRGB(0, 255, 0, 0);
-        digitalWrite(VENTI, 255);
-  
+        digitalWrite(VENTI, ventilateur);
+
         tone(SPEAKER,208);
         delayMicroseconds(BassTab[0]);
         tone(SPEAKER,3136);
         delayMicroseconds(BassTab[1]);
-  
+
       }else{
         digitalWrite(ledPin, LOW);
         ledLight(sensorValue);
-        digitalWrite(VENTI, 0);
-  
+        digitalWrite(VENTI, ventilateur);
+
         tone(SPEAKER,0);
       }
-     
+
    vTaskDelay(1000 / portTICK_PERIOD_MS);
   }
 }
@@ -167,7 +194,7 @@ void setup(){
   pinMode(SPEAKER,OUTPUT);
   tone(SPEAKER,0);
   pinMode(VENTI,OUTPUT);
-  
+
   connectToWiFi();
   setup_task();
   setup_routing();
