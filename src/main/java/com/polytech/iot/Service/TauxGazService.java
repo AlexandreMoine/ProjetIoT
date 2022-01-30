@@ -30,15 +30,7 @@ public class TauxGazService {
     }
 
     public List<TauxGazEntity> getListTauxGaz(){
-        return this.tauxGazRepository.findAll();        //Recup liste de gaz et date
+        return this.tauxGazRepository.findAll();
     }
 
-    public TauxGazEntity enregistrerTauxGaz(TauxGazEntity tauxGazEntity) {
-        try {
-           return this.tauxGazRepository.save(tauxGazEntity);
-        } catch (Exception e) {
-            new MonException("Insert", "Sql", e.getMessage());
-        }
-        return null;
-    }
 }

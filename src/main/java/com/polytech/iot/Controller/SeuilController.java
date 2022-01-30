@@ -19,11 +19,6 @@ public class SeuilController {
         return (Integer)this.seuilService.getSeuil();
     }
 
-/*    @PostMapping("/modificationSeuil")
-    public void modificationSeuil(@RequestBody int newSeuil) {
-        this.seuilService.modifierSeuil(newSeuil);
-    }
- */
     @PostMapping("/modificationSeuil")
     @ResponseBody
     public void modificationSeuil(@RequestBody SeuilEntity seuilEntity) {

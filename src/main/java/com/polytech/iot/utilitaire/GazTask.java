@@ -1,17 +1,12 @@
 package com.polytech.iot.utilitaire;
 
-import com.polytech.iot.Controller.TauxGazController;
-import com.polytech.iot.Domain.TauxGazEntity;
-import com.polytech.iot.Service.TauxGazService;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -43,7 +38,8 @@ public class GazTask extends TimerTask {
     }
 
     public int returnValue() throws JSONException, IOException {
-        String urlTest = "http://192.168.2.41";
+//        String urlTest = "http://192.168.2.41";
+        String urlTest = "http://192.168.43.20";
         JSONObject json;
         json = readJsonFromUrl(urlTest+"/tauxGaz");
 

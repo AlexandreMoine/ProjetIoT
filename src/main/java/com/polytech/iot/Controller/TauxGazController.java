@@ -32,12 +32,11 @@ public class TauxGazController{
     public void enregistrerTauxGaz(){
         Timer timer;
         timer = new Timer();
-        timer.schedule(new GazTask(), 1000, 30000); //en milli seconde
+        timer.schedule(new GazTask(), 1000, 5000); //en milli seconde
     }
 
     @GetMapping("/getListeTauxGaz")
     public List<TauxGazEntity> getListTauxGaz() {
         return this.tauxGazService.getListTauxGaz();
-//        return null;
     }
 }

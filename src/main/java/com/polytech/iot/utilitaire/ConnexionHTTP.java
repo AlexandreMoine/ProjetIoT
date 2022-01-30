@@ -17,8 +17,8 @@ import java.nio.charset.StandardCharsets;
 @Service
 public class ConnexionHTTP {
 
-    public String urlTest = "http://192.168.2.41";    //Linksys RM
-//    public String url = "http://192.168.43.20";   //Huawei de Quentin
+//    public String urlTest = "http://192.168.2.41";    //Linksys RM
+    public String urlTest = "http://192.168.43.20";   //Huawei de Quentin
 
     public Object getSeuil() throws Exception {
         JSONObject json;

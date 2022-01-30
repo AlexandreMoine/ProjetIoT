@@ -1,7 +1,6 @@
 package com.polytech.iot.Domain;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 @Table(name = "mesure")
@@ -10,7 +9,16 @@ public class TauxGazEntity {
 
     private Integer id;
     private Integer quantiteGaz;
-    private Date dateMesure;
+    private String dateMesure;
+    private Integer seuil_id;
+
+    public Integer getSeuil_id() {
+        return seuil_id;
+    }
+
+    public void setSeuil_id(Integer seuil_id) {
+        this.seuil_id = seuil_id;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +32,7 @@ public class TauxGazEntity {
     }
 
     @Basic
-    @Column(name = "quantiteGaz", nullable = false)
+    @Column(name = "quantitegaz", nullable = false)
     public Integer getQuantiteGaz() {
         return quantiteGaz;
     }
@@ -34,12 +42,12 @@ public class TauxGazEntity {
     }
 
     @Basic
-    @Column(name = "dateMesure", nullable = false)
-    public Date getDateMesure() {
+    @Column(name = "datemesure", nullable = false)
+    public String getDateMesure() {
         return dateMesure;
     }
 
-    public void setDateMesure(Date dateMesure) {
+    public void setDateMesure(String dateMesure) {
         this.dateMesure = dateMesure;
     }
 
